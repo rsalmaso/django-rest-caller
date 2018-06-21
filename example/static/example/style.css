@@ -1,0 +1,27 @@
+.button {
+  background-color: #3bc;
+  border-radius: 0.4em;
+  padding: 0.4em;
+  width: auto;
+  display: inline-block;
+}
+
+.button:hover {
+  background-color: #4cd;
+}
+
+.post {
+  border-radius: 0.4em;
+  margin: 2em;
+  padding: 0.2em 2em;
+  background-color: #EEE;
+}
+
+.post h2 {
+  border-bottom: 1px solid rgba(3, 3, 3, 0.8);
+  padding-bottom: 0.4em;
+}
+
+.hidden {
+  display: none;
+}

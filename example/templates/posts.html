@@ -1,0 +1,38 @@
+{% load caller_tags static %}
+<html>
+  <head>
+    <title>Posts view</title>
+    {% call "api:post-list" as "posts" %}
+    {{ posts|json_script:"posts-data" }}
+    <link href="{% static 'example/style.css' %}" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    {% for post in posts %}
+    {# use posts as an object #}
+    <div class="hidden">
+      <h2>{{ post.title }}</h2>
+      <p>{{ post.text }}</p>
+    </div>
+    {% endfor %}
+
+    {# use posts to feed a javascript app #}
+    <div id="app">
+      <div v-if="panel === 'list'">
+        <div v-for="(post, index) in posts" class="post">
+          <h2>${post.title}</h2>
+          <p>${post.text}</p>
+          <div class="button" @click="show_detail(index, $event)">View</div>
+        </div>
+      </div>
+      <div v-else>
+        <div class="post">
+          <h2>${post.title}</h2>
+          <p>${post.text}</p>
+          <div class="button" @click="show_list">⇐ Back</div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'example/vue.js' %}"></script>
+    <script src="{% static 'example/posts.js' %}"></script>
+  </body>
+</html>
