@@ -1,0 +1,8 @@
+include README.md
+include AUTHORS
+include COPYING
+include MANIFEST.in
+recursive-include caller/locale *
+recursive-include caller/templates *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
