@@ -31,7 +31,7 @@ with io.open('README.md', "rt", encoding='utf-8') as fp:
 setup(
     name="django-rest-caller",
     version=caller.__version__,
-    description="Caller",
+    description="templatetag to call an urlconf and store its payload into the template context",
     long_description=long_description,
     long_description_content_type='text/markdown',
     license="MIT",
