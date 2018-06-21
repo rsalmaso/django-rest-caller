@@ -33,7 +33,7 @@ setup(
     version=caller.__version__,
     description="templatetag to call an urlconf and store its payload into the template context",
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     license="MIT",
     author=caller.__author__,
     author_email=caller.__email__,

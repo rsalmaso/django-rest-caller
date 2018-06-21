@@ -5,7 +5,7 @@ Simple django templatetag for calling an urlconf view endpoint.
 
 * it works only for GET methods
 * it doesn't handle request without a body
-* it doen't play nice with login required views (it assumes that the caller handle everything it is required to access the endpoint)
+* it doen't play nice with login required views (it assumes that the caller handles everything it is required to access the endpoint)
 * it assumes that the endpoint returns a json
 
 ## Installation
@@ -119,6 +119,10 @@ console.log(data);
 ```
 
 ## Changes
+
+### 0.1.1 - 0.1.2
+
+* update documentation
 
 ### 0.1.0
 
