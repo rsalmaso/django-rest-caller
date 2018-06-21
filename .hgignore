@@ -1,0 +1,25 @@
+syntax: glob
+doc/_build
+.svnignore
+.DS_Store
+.svn
+Thumbs.db
+.directory
+.venv
+.sass-cache
+*.swp
+*~
+*-
+*.pyc
+*.kpf
+*.orig
+*.bak
+*.dist-info
+
+syntax: regexp
+\.git
+^log/
+^\.idea
+^media
+^static
+^.vagrant
