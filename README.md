@@ -10,6 +10,12 @@ Simple django templatetag for calling an urlconf view endpoint.
 
 ## Installation
 
+Install with pip
+
+```console
+$ python3 -m pip install django-rest-caller
+```
+
 Add `caller.apps.CallerConfig` to `INSTALLED_APPS`
 
 ```python
