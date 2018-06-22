@@ -39,20 +39,23 @@ class TestTag(TestCase):
     def setUp(self):
         self.posts = [Post.objects.create(**post) for post in POSTS]
 
+    def loads(self, value, node=None):
+        if node:
+            value = value.replace("""<script id="{}" type="application/json">""".format(node), "").replace("""</script>""", "")  # noqa: E501
+        return json.loads(value)
+
     @setup({"posts": "{% load caller_tags %}{% call 'api:post-list' as 'posts' %}{{ posts|json_script:'posts-data' }}"})  # noqa: E501
     def test_list(self):
         request = self.client.get("/").wsgi_request
         output = self.engine.render_to_string("posts", {"request": request})
-        output = output.replace("""<script id="posts-data" type="application/json">""", "").replace("""</script>""", "")  # noqa: E501
-        data = json.loads(output)
+        data = self.loads(output, "posts-data")
         self.assertEqual(len(data["data"]), 3)
 
     @setup({"post": "{% load caller_tags %}{% call 'api:post-detail' 1 'post-1' as 'post' %}{{ post|json_script:'post-data' }}"})  # noqa: E501
     def test_detail(self):
         request = self.client.get("/").wsgi_request
         output = self.engine.render_to_string("post", {"request": request})
-        output = output.replace("""<script id="post-data" type="application/json">""", "").replace("""</script>""", "")
-        data = json.loads(output)
+        data = self.loads(output, "post-data")
         self.assertEqual(data["data"]["slug"], "post-1")
 
     @setup({
