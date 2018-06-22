@@ -26,9 +26,9 @@ from example.models import Post
 from .utils import setup
 
 POSTS = (
-    {"title": "post 1", "slug": "post-1", "text": "text for post 1"},
-    {"title": "post 2", "slug": "post-2", "text": "text for post 2"},
-    {"title": "post 3", "slug": "post-3", "text": "text for post 3"},
+    {"id": 1, "title": "post 1", "slug": "post-1", "text": "text for post 1"},
+    {"id": 2, "title": "post 2", "slug": "post-2", "text": "text for post 2"},
+    {"id": 3, "title": "post 3", "slug": "post-3", "text": "text for post 3"},
 )
 
 
@@ -46,7 +46,7 @@ class TestTag(TestCase):
         data = json.loads(output)
         self.assertEqual(len(data["data"]), 3)
 
-    @setup({"post": "{% load caller_tags %}{% call 'api:post-detail' 'post-1' as 'post' %}{{ post|json_script:'post-data' }}"})  # noqa: E501
+    @setup({"post": "{% load caller_tags %}{% call 'api:post-detail' 1 'post-1' as 'post' %}{{ post|json_script:'post-data' }}"})  # noqa: E501
     def test_detail(self):
         request = self.client.get("/").wsgi_request
         output = self.engine.render_to_string("post", {"request": request})

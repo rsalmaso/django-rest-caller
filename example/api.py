@@ -38,8 +38,8 @@ class PostMixin:
             "slug": post.slug,
             "_links": {
                 "path": request.build_absolute_uri(),
-                "detail": request.build_absolute_uri(reverse('api:post-detail', args=[post.slug])),
-                "view": request.build_absolute_uri(reverse('blog:post-detail', args=[post.slug])),
+                "detail": request.build_absolute_uri(reverse('api:post-detail', args=[post.pk, post.slug])),
+                "view": request.build_absolute_uri(reverse('blog:post-detail', args=[post.pk, post.slug])),
             },
         }
 
@@ -54,10 +54,10 @@ class PostListView(PostMixin, View):
 
 
 class PostDetailView(PostMixin, View):
-    def get(self, request, slug, *args, **kwargs):
+    def get(self, request, id, slug, *args, **kwargs):
         status, data = 404, {}
         try:
-            post = self.get_queryset().get(slug=slug)
+            post = self.get_queryset().get(pk=int(id), slug=slug)
             status, data = 200, self.serialize(post)
         except Post.DoesNotExist:
             pass

@@ -29,9 +29,9 @@ new Vue({
       self.show_list();
     } else {
       // detail view
-      path = path.replace('/posts/', '');
+      var id = path.replace('/posts/', '').split("/")[0];
       this.posts.map(function(post, index) {
-        if (post.slug === path) {
+        if (post.id === id) {
           self.show_detail(index);
         }
       });
@@ -51,7 +51,7 @@ new Vue({
     show_detail: function(index, ev) {
       if (ev) {ev.preventDefault();};
       this.post = this.posts[index];
-      this.show_panel("detail", "/posts/" + this.post.slug);
+      this.show_panel("detail", "/posts/" + this.post.id + "/" + this.post.slug);
     }
   }
 });
