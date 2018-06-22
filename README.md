@@ -120,6 +120,10 @@ console.log(data);
 
 ## Changes
 
+### dev
+
+* always require `as 'varname'`
+
 ### 0.1.1 - 0.1.2
 
 * update documentation

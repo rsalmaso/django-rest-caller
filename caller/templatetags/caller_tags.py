@@ -25,7 +25,9 @@ from wsgiref.handlers import BaseHandler
 
 from django import template
 from django.core.servers.basehttp import get_internal_wsgi_application as get_wsgi_application
+from django.template import TemplateSyntaxError
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 register = template.Library()
 
@@ -124,18 +126,16 @@ def call(parser, token):
         </div>
     """
     bits = token.split_contents()
-    if len(bits) < 3:
-        raise Exception
+    if len(bits) < 4:
+        raise TemplateSyntaxError(_("'call' templatetag has less than 3 arguments (needs 'urlconf as varname')"))
 
-    view, args, params, varname = bits[1], [], [], None
-    if bits[-2] == "as":
-        varname = bits[-1]
-        bits = bits[2:-2]
-    else:
-        bits = bits[2:]
+    if bits[-2] != "as":
+        raise TemplateSyntaxError(_("Missing `as 'varname' as last parameters in 'call' templatag"))
+
+    view, args, params, varname = bits[1], [], [], bits[-1]
 
     is_param = False
-    for bit in bits:
+    for bit in bits[2:-2]:
         if bit == 'with':
             is_param = True
         elif is_param:

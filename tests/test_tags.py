@@ -20,6 +20,7 @@
 
 import json
 
+from django.template.exceptions import TemplateSyntaxError
 from django.test import TestCase
 from example.models import Post
 
@@ -53,3 +54,14 @@ class TestTag(TestCase):
         output = output.replace("""<script id="post-data" type="application/json">""", "").replace("""</script>""", "")
         data = json.loads(output)
         self.assertEqual(data["data"]["slug"], "post-1")
+
+    @setup({
+        "posts": "{% load caller_tags %}{% call 'api:post-list' %}",
+        "post": "{% load caller_tags %}{% call 'api:post-detail' 1 'post-1' %}",
+    })
+    def test_need_at_least_urlconf_as_varname_parameters(self):
+        request = self.client.get("/").wsgi_request
+        with self.assertRaises(TemplateSyntaxError):
+            self.engine.render_to_string("posts", {"request": request})
+        with self.assertRaises(TemplateSyntaxError):
+            self.engine.render_to_string("post", {"request": request})
