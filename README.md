@@ -13,7 +13,7 @@ Simple django templatetag for calling an urlconf view endpoint.
 Install with pip
 
 ```console
-$ python3 -m pip install django-rest-caller
+    $ python3 -m pip install django-rest-caller
 ```
 
 Add `caller.apps.CallerConfig` to `INSTALLED_APPS`
@@ -38,11 +38,11 @@ In your template load the templatetag
 
 and use the `call` tag as
 ```html+django
-{% call 'urlconf' arg1=42 arg2='X' with param1='1' param2='2' as 'object_name' %}
+    {% call 'urlconf' arg1=42 arg2='X' with param1='1' param2='2' as 'object_name' %}
 ```
 or
 ```html+django
-{% call 'urlconf' 42 'X' with param1='1' param2='2' as 'object_name' %}
+    {% call 'urlconf' 42 'X' with param1='1' param2='2' as 'object_name' %}
 ```
 
 * `'urlconf' arg1=42 arg2='X'` this is the usual {% url %} parameters (remember: use args parameter list or kwargs parameters, not both)
@@ -51,7 +51,7 @@ or
 
 so the called url is equivalent to
 ```html+django
-{% url 'urlconf' arg1=42 arg2='X' %}?param1=1&param2=2
+    {% url 'urlconf' arg1=42 arg2='X' %}?param1=1&param2=2
 ```
 
 The `call` will inject the result json object into the template context, so you can
@@ -96,30 +96,30 @@ which safely outputs a Python object as JSON, wrapped in a `<script>` tag, ready
 
 with
 ```python
-value = {'hello': 'world'}
+    value = {'hello': 'world'}
 ```
 
 and
 
 ```html+django
-{{ value|json_script:"hello-data" }}
+    {{ value|json_script:"hello-data" }}
 ```
 
 will output
 
 ```html
-<script id="hello-data" type="application/json">{"hello": "world"}</script>
+    <script id="hello-data" type="application/json">{"hello": "world"}</script>
 ```
 
 and can be retrieved with
 
 ```javascript
-function get_json(name) {
-  var el = document.getElementById(name);
-  return JSON.parse(el.textContent || el.innerText);
-}
-var data = get_json("hello-data");
-console.log(data);
+    function get_json(name) {
+      var el = document.getElementById(name);
+      return JSON.parse(el.textContent || el.innerText);
+    }
+    var data = get_json("hello-data");
+    console.log(data);
 ```
 
 ## Changes
@@ -128,6 +128,7 @@ console.log(data);
 
 * always require `as 'varname'`
 * be able to use args or kwargs for urlconf as documented
+* update documentation
 
 ### 0.1.1 - 0.1.2
 
