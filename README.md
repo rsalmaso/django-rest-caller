@@ -124,7 +124,7 @@ and can be retrieved with
 
 ## Changes
 
-### dev
+### 0.1.3
 
 * always require `as 'varname'`
 * be able to use args or kwargs for urlconf as documented
