@@ -68,3 +68,22 @@ class TestTag(TestCase):
             self.engine.render_to_string("posts", {"request": request})
         with self.assertRaises(TemplateSyntaxError):
             self.engine.render_to_string("post", {"request": request})
+
+    @setup({
+        "post-1": "{% load caller_tags %}{% call 'api:post-detail' id=1 'post-1' as 'post' %}{{ post|json_script:'post-data' }}",  # noqa: E501
+        "post-2": "{% load caller_tags %}{% call 'api:post-detail' 1 slug='post-1' as 'post' %}{{ post|json_script:'post-data' }}",  # noqa: E501
+        "post-3": "{% load caller_tags %}{% call 'api:post-detail' id=1 slug='post-1' as 'post' %}{{ post|json_script:'post-data' }}",  # noqa: E501
+        "post-4": "{% load caller_tags %}{% call 'api:post-detail' 1 'post-1' as 'post' %}{{ post|json_script:'post-data' }}",  # noqa: E501
+    })
+    def test_cannot_mix_args_and_kwargs(self):
+        request = self.client.get("/").wsgi_request
+        with self.assertRaises(TemplateSyntaxError):
+            self.engine.render_to_string("post-1", {"request": request})
+        with self.assertRaises(TemplateSyntaxError):
+            self.engine.render_to_string("post-2", {"request": request})
+        output = self.engine.render_to_string("post-3", {"request": request})
+        data = self.loads(output, "post-data")
+        self.assertEqual(data["data"]["slug"], "post-1")
+        output = self.engine.render_to_string("post-4", {"request": request})
+        data = self.loads(output, "post-data")
+        self.assertEqual(data["data"]["slug"], "post-1")

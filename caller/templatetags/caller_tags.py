@@ -64,20 +64,19 @@ class CallHandler(BaseHandler):
 
 
 class CallNode(template.Node):
-    def __init__(self, *, view, args, params, varname):
-        self.view = template.Variable(view)
-        self.args = [template.Variable(arg) for arg in args]
-        self.params = []
-        for param in params:
-            key, value = param.split("=")
-            self.params.append([key, template.Variable(value)])
-        self.varname = template.Variable(varname)
+    def __init__(self, *, view, args, kwargs, params, varname):
+        self.view = view
+        self.args = args
+        self.kwargs = kwargs
+        self.params = params
+        self.varname = varname
 
     def render(self, context):
         self.context = context
 
-        args = [arg.resolve(context) for arg in self.args]
-        url = reverse(self.view.resolve(context), args=args)
+        args = [arg.resolve(context) for arg in self.args] if self.args else None
+        kwargs = {k: v.resolve(context) for k, v in self.kwargs.items()} if self.kwargs else None
+        url = reverse(self.view.resolve(context), args=args, kwargs=kwargs)
 
         request = context["request"]
         # calling a rest framework view it assumes that it's the original HttpRequest
@@ -132,18 +131,30 @@ def call(parser, token):
     if bits[-2] != "as":
         raise TemplateSyntaxError(_("Missing `as 'varname' as last parameters in 'call' templatag"))
 
-    view, args, params, varname = bits[1], [], [], bits[-1]
+    view, args, kwargs, params, varname = template.Variable(bits[1]), [], {}, [], template.Variable(bits[-1])
 
     is_param = False
     for bit in bits[2:-2]:
         if bit == 'with':
             is_param = True
         elif is_param:
-            params.append(bit)
+            key, value = bit.split("=")
+            params.append([key, template.Variable(value)])
         else:
-            args.append(bit)
+            try:
+                key, value = bit.split("=")
+            except ValueError:
+                args.append(template.Variable(bit))
+            else:
+                kwargs[key] = template.Variable(value)
 
-    return CallNode(view=view, args=args, params=params, varname=varname)
+    if args and kwargs:
+        raise TemplateSyntaxError("Cannot mix args and kwargs in 'call' templatetag!")
+
+    args = args if args else None
+    kwargs = kwargs if kwargs else None
+
+    return CallNode(view=view, args=args, kwargs=kwargs, params=params, varname=varname)
 
 
 # backport of django 2.1 json_script filter

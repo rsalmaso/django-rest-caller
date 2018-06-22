@@ -40,8 +40,12 @@ and use the `call` tag as
 ```html+django
 {% call 'urlconf' arg1=42 arg2='X' with param1='1' param2='2' as 'object_name' %}
 ```
+or
+```html+django
+{% call 'urlconf' 42 'X' with param1='1' param2='2' as 'object_name' %}
+```
 
-* `'urlconf' arg1=42 arg2='X'` this is the usual {% url %} parameters
+* `'urlconf' arg1=42 arg2='X'` this is the usual {% url %} parameters (remember: use args parameter list or kwargs parameters, not both)
 * `param1='1' param2='2'` these parameters will be converted to GET querystring
 * `as 'object_name'` store the called object into object_name object. It can be a string or a variable name.
 
@@ -123,6 +127,7 @@ console.log(data);
 ### dev
 
 * always require `as 'varname'`
+* be able to use args or kwargs for urlconf as documented
 
 ### 0.1.1 - 0.1.2
 
