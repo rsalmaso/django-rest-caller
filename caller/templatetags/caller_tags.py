@@ -155,14 +155,14 @@ def call(parser, token):
             is_param = True
         elif is_param:
             key, value = bit.split("=")
-            params.append([key, template.Variable(value)])
+            params.append([key, parser.compile_filter(value)])
         else:
             try:
                 key, value = bit.split("=")
             except ValueError:
-                args.append(template.Variable(bit))
+                args.append(parser.compile_filter(bit))
             else:
-                kwargs[key] = template.Variable(value)
+                kwargs[key] = parser.compile_filter(value)
 
     if args and kwargs:
         raise TemplateSyntaxError("Cannot mix args and kwargs in 'call' templatetag!")

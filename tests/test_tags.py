@@ -96,6 +96,17 @@ class TestTag(TestCase):
         self.assertEqual(data["data"]["slug"], "post-1")
 
     @setup({
+        "post-1": "{% load caller_tags %}{% call 'api:post-detail' id=1 slug='POST-1'|lower as 'post' %}{{ post|json_script:'post-data' }}",  # noqa: E501
+        "post-2": "{% load caller_tags %}{% with slug='POST-2' %}{% call 'api:post-detail' id=2 slug=slug|lower as 'post' %}{{ post|json_script:'post-data' }}{% endwith %}",  # noqa: E501
+    })
+    def test_can_use_filters(self):
+        request = self.client.get("/").wsgi_request
+        for post in ["post-1", "post-2"]:
+            output = self.engine.render_to_string(post, {"request": request})
+            data = self.loads(output, "post-data")
+            self.assertEqual(data["data"]["slug"], post)
+
+    @setup({
         "post-1": "{% load caller_tags %}{% call 'api:post-detail' id=1 'post-1' as 'post' %}{{ post|json_script:'post-data' }}",  # noqa: E501
         "raise-exception": "{% load caller_tags %}{% call 'api:raise-exception' as 'value' %}{{ value|json_script:'value-data' }}",  # noqa: E501
     })
