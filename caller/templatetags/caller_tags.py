@@ -20,7 +20,7 @@
 
 import json
 from io import StringIO
-from urllib.parse import quote_plus, urlencode
+from urllib.parse import quote_plus, unquote_plus, urlencode
 from wsgiref.handlers import BaseHandler
 
 from django import template
@@ -87,7 +87,7 @@ class CallNode(template.Node):
 
         args = [arg.resolve(context) for arg in self.args] if self.args else None
         kwargs = {k: v.resolve(context) for k, v in self.kwargs.items()} if self.kwargs else None
-        url = reverse(self.view.resolve(context), args=args, kwargs=kwargs)
+        url = unquote_plus(reverse(self.view.resolve(context), args=args, kwargs=kwargs))
 
         request = context["request"]
         # calling a rest framework view it assumes that it's the original HttpRequest

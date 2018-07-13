@@ -124,6 +124,10 @@ and can be retrieved with
 
 ## Changes
 
+### dev
+
+* proper url unquote arg parameters
+
 ### 0.1.4
 
 * show raised exception in called view instead of a generic one

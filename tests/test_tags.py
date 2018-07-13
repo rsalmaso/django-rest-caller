@@ -30,6 +30,7 @@ POSTS = (
     {"id": 1, "title": "post 1", "slug": "post-1", "text": "text for post 1"},
     {"id": 2, "title": "post 2", "slug": "post-2", "text": "text for post 2"},
     {"id": 3, "title": "post 3", "slug": "post-3", "text": "text for post 3"},
+    {"id": 4, "title": "post 4", "slug": "post 4", "text": "text for post 4 with spaces"},
 )
 
 
@@ -49,14 +50,20 @@ class TestTag(TestCase):
         request = self.client.get("/").wsgi_request
         output = self.engine.render_to_string("posts", {"request": request})
         data = self.loads(output, "posts-data")
-        self.assertEqual(len(data["data"]), 3)
+        self.assertEqual(len(data["data"]), 4)
 
-    @setup({"post": "{% load caller_tags %}{% call 'api:post-detail' 1 'post-1' as 'post' %}{{ post|json_script:'post-data' }}"})  # noqa: E501
+    @setup({
+        "post": "{% load caller_tags %}{% call 'api:post-detail' 1 'post-1' as 'post' %}{{ post|json_script:'post-data' }}",  # noqa: E501
+        "post-with-spaces": "{% load caller_tags %}{% call 'api:post-detail' 4 'post 4' as 'post' %}{{ post|json_script:'post-data' }}",  # noqa: E501
+    })  # noqa: E501
     def test_detail(self):
         request = self.client.get("/").wsgi_request
         output = self.engine.render_to_string("post", {"request": request})
         data = self.loads(output, "post-data")
         self.assertEqual(data["data"]["slug"], "post-1")
+        output = self.engine.render_to_string("post-with-spaces", {"request": request})
+        data = self.loads(output, "post-data")
+        self.assertEqual(data["data"]["slug"], "post 4")
 
     @setup({
         "posts": "{% load caller_tags %}{% call 'api:post-list' %}",
