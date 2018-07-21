@@ -19,7 +19,10 @@
 # THE SOFTWARE.
 
 from django.contrib import admin
-from django.urls import include, re_path as url
+try:
+    from django.urls import include, re_path as url
+except ImportError:
+    from django.conf.urls import include, url
 from django.views.generic import RedirectView
 
 from . import api, views
