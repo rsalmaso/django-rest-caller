@@ -28,6 +28,7 @@ from django.views.generic import RedirectView
 from . import api, views
 
 api_patterns = [
+    url(r'^raise-exception$', api.RaiseExceptionView.as_view(), name='raise-exception'),
     url(r'^posts/(?P<id>.+)/(?P<slug>.+)$', api.PostDetailView.as_view(), name='post-detail'),
     url(r'^posts$', api.PostListView.as_view(), name='post-list'),
 ]

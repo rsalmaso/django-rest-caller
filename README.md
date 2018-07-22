@@ -124,6 +124,10 @@ and can be retrieved with
 
 ## Changes
 
+### dev
+
+* show raised exception in called view instead of a generic one
+
 ### 0.1.3
 
 * always require `as 'varname'`

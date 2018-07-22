@@ -87,3 +87,14 @@ class TestTag(TestCase):
         output = self.engine.render_to_string("post-4", {"request": request})
         data = self.loads(output, "post-data")
         self.assertEqual(data["data"]["slug"], "post-1")
+
+    @setup({
+        "post-1": "{% load caller_tags %}{% call 'api:post-detail' id=1 'post-1' as 'post' %}{{ post|json_script:'post-data' }}",  # noqa: E501
+        "raise-exception": "{% load caller_tags %}{% call 'api:raise-exception' as 'value' %}{{ value|json_script:'value-data' }}",  # noqa: E501
+    })
+    def test_exception(self):
+        request = self.client.get("/").wsgi_request
+        with self.assertRaises(TemplateSyntaxError):
+            self.engine.render_to_string("post-1", {"request": request})
+        with self.assertRaises(ZeroDivisionError):
+            self.engine.render_to_string("raise-exception", {"request": request})

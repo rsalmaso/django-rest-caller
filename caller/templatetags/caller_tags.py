@@ -24,7 +24,7 @@ from urllib.parse import quote_plus, urlencode
 from wsgiref.handlers import BaseHandler
 
 from django import template
-from django.core.servers.basehttp import get_internal_wsgi_application as get_wsgi_application
+from django.core.handlers.wsgi import WSGIHandler as BaseAppHandler
 from django.template import TemplateSyntaxError
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -62,6 +62,18 @@ class CallHandler(BaseHandler):
         pass
 
 
+class AppHandler(BaseAppHandler):
+    caller_exception = None
+
+    def process_exception_by_middleware(self, exception, request):
+        """
+        Grab called exception, so can be reraised and shown it
+        instead of JSONDecodeError in CallNode.render() method
+        """
+        self.caller_exception = exception
+        super().process_exception_by_middleware(exception, request)
+
+
 class CallNode(template.Node):
     def __init__(self, *, view, args, kwargs, params, varname):
         self.view = view
@@ -91,12 +103,17 @@ class CallNode(template.Node):
         )
 
         handler = CallHandler(environ=environ)
-        app = get_wsgi_application()
+        app = AppHandler()
         handler.run(app)
         response = handler.content.decode("utf-8") if isinstance(handler.content, bytes) else handler.content
 
         varname = self.varname.resolve(context)
-        context[varname] = json.loads(response)
+        try:
+            context[varname] = json.loads(response)
+        except Exception:
+            if app.caller_exception:
+                raise app.caller_exception
+            raise
         return ""
 
 

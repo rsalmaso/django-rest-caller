@@ -19,6 +19,7 @@
 # THE SOFTWARE.
 
 from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.urls import reverse
 from django.views import View
 
@@ -66,3 +67,8 @@ class PostDetailView(PostMixin, View):
             "status": status,
             "data": data,
         }, status=status)
+
+
+class RaiseExceptionView(View):
+    def get(self, request, *args, **kwargs):
+        raise 1/0
