@@ -124,6 +124,10 @@ and can be retrieved with
 
 ## Changes
 
+### dev
+
+* extract generic code from templatetag
+
 ### 0.1.5
 
 * proper url unquote arg parameters
