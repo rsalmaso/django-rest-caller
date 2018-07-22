@@ -124,7 +124,7 @@ and can be retrieved with
 
 ## Changes
 
-### dev
+### 0.1.5
 
 * proper url unquote arg parameters
 * can use templatefilters in templatetag parameters
