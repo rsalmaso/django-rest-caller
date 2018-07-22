@@ -94,7 +94,7 @@ class CallNode(template.Node):
         handler = CallHandler(environ=environ)
         app = get_wsgi_application()
         handler.run(app)
-        response = handler.content
+        response = handler.content.decode("utf-8") if isinstance(handler.content, bytes) else handler.content
 
         varname = self.varname.resolve(context)
         context[varname] = json.loads(response)
