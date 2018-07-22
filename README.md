@@ -124,7 +124,7 @@ and can be retrieved with
 
 ## Changes
 
-### dev
+### 0.1.4
 
 * show raised exception in called view instead of a generic one
 
