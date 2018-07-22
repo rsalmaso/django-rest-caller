@@ -19,7 +19,7 @@
 # THE SOFTWARE.
 
 import json
-from io import BytesIO
+from io import StringIO
 from urllib.parse import quote_plus, urlencode
 from wsgiref.handlers import BaseHandler
 
@@ -34,9 +34,9 @@ register = template.Library()
 
 class CallHandler(BaseHandler):
     def __init__(self, *, environ, multithread=True, multiprocess=False):
-        self.stdin = BytesIO()
-        self.stdout = BytesIO()
-        self.stderr = BytesIO()
+        self.stdin = StringIO()
+        self.stdout = StringIO()
+        self.stderr = StringIO()
         self.environ = environ
         self.wsgi_multithread = multithread
         self.wsgi_multiprocess = multiprocess
