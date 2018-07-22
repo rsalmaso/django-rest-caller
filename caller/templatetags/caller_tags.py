@@ -59,8 +59,7 @@ class CallHandler(BaseHandler):
         self.content = data
 
     def _flush(self):
-        self.stdout.flush()
-        self._flush = self.stdout.flush
+        pass
 
 
 class CallNode(template.Node):
