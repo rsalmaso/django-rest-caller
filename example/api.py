@@ -65,4 +65,4 @@ class PostDetailView(PostMixin, View):
             "url": request.build_absolute_uri(),
             "status": status,
             "data": data,
-        })
+        }, status=status)
