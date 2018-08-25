@@ -18,6 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from .utils import call  # noqa: F401
 from .version import get_version
 
 VERSION = (0, 2, 1, "final", 0)

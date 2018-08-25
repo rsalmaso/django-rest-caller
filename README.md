@@ -124,6 +124,10 @@ and can be retrieved with
 
 ## Changes
 
+### dev
+
+* export utils.call in __init__, so can do `from caller import call`
+
 ### 0.2.1
 
 * fix VERSION import error
