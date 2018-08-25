@@ -21,7 +21,7 @@
 from .utils import call  # noqa: F401
 from .version import get_version
 
-VERSION = (0, 2, 1, "final", 0)
+VERSION = (0, 2, 2, "final", 0)
 
 __version__ = get_version(VERSION)
 __author__ = "Raffaele Salmaso"
