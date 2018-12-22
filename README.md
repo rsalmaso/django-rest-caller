@@ -124,6 +124,10 @@ and can be retrieved with
 
 ## Changes
 
+### dev
+
+* fix VERSION import error
+
 ### 0.2.0
 
 * extract generic code from templatetag
