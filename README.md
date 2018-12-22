@@ -124,7 +124,7 @@ and can be retrieved with
 
 ## Changes
 
-### dev
+### 0.2.1
 
 * fix VERSION import error
 
